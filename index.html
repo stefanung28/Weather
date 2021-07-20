@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<script>
+	
+function Start(){
+let res;
+res = GenereazaLinkJudet();
+Vreme(res);
+document.getElementById('avansat').value=''; 
+}
+
+function GenereazaLinkJudet(){
+	
+  	var x = document.getElementById("JUDETE").selectedIndex;
+  	let judet = document.getElementsByTagName("option")[x].value;
+  	var rezultat = judet.localeCompare("none");
+  	if(judet.localeCompare("none")==0)
+  		document.body.style.background = "#373940";
+ 	if(rezultat==0)
+ 	{
+ 		let CAUTARE_AVANSATA = document.getElementById("avansat").value;
+ 		//document.getElementById("idjudet").innerHTML = CAUTARE_AVANSATA;
+		let first = "http://api.openweathermap.org/data/2.5/weather?q=";
+		let second = ",ro&&appid=a7489a083d25182fefe80bfa8ee6dc0e&units=metric&lang=en";
+		let third = first.concat(CAUTARE_AVANSATA);
+		res = third.concat(second);
+		return res;
+
+ 	}
+ 	else 
+ 	{
+ 	//☁️ ❄️ 🌧️ 🌩️ 🌪️ ☀️ ⛅ 
+ 	// document.getElementById("idjudet").innerHTML = judet;
+	let first = "http://api.openweathermap.org/data/2.5/weather?q=";
+	let second = ",ro&&appid=a7489a083d25182fefe80bfa8ee6dc0e&units=metric&lang=en";
+	let third = first.concat(judet);
+	res = third.concat(second);
+	return res;
+	}
+	
+}
+
+function Vreme(res) {
+	fetch(res)
+	.then(function(resp) { return resp.json() })
+	.then(function(data) {
+	let eroare = data.cod;
+	if(eroare == "404")
+	{
+		document.getElementById('idjudet').innerHTML = "Eroare!";
+			document.getElementById('temperatura_medie').innerHTML = "";
+	document.getElementById('temperatura_minima').innerHTML = "";
+	document.getElementById('temperatura_maxima').innerHTML = "";
+	document.getElementById('general').innerHTML= "";
+	document.getElementById('vant').innerHTML= "";
+	document.getElementById('umiditate').innerHTML = "";
+	document.getElementById('nori').innerHTML= "";
+	}
+	else{
+		document.getElementById('idjudet').innerHTML = "";
+	//weather = ["☁️", "❄️", "🌧️", "🌩️", "🌪️", "☀️", "⛅"];
+	let Temp_medie= data.main.temp;
+	let Temp_minima = data.main.temp_min;
+	let Temp_maxima = data.main.temp_max;
+	let MainDescription = data.weather[0].main;
+	let Description = data.weather[0].description;
+	let Umiditate = data.main.humidity;
+	let Vant = data.wind.speed;
+	let Nori = data.clouds.all;
+		if(Description.localeCompare("overcast clouds") == 0)
+		{
+			document.getElementById('vreme_titlu').innerHTML = "VREME";
+				Description = "multi nori";
+			document.body.style.background = "#A7A13D";
+			document.getElementById('general').innerHTML= "🌤 " + Description.toLocaleString('en');
+		}
+		if(Description.localeCompare("scattered clouds")==0)
+			{	document.getElementById('vreme_titlu').innerHTML = "VREME";
+				Description = "nori imprastiati";
+			document.body.style.background = "#A7A13D";
+			document.getElementById('general').innerHTML= "🌤 " + Description.toLocaleString('en');
+			}
+		if(Description.localeCompare("moderate rain") == 0)
+			{	document.getElementById('vreme_titlu').innerHTML = "VREME";
+				Description = "ploaie moderata";
+				document.body.style.background = "#140EA2";
+			document.getElementById('general').innerHTML= "🌧 " + Description.toLocaleString('en');
+			}
+		if(Description.localeCompare("shower rain") == 0)
+		{
+			document.getElementById('vreme_titlu').innerHTML = "VREME";
+				Description = "ploaie rapida";
+			document.body.style.background = "#140EA2";
+			document.getElementById('general').innerHTML= "🌧 " + Description.toLocaleString('en');
+
+		}
+		if(Description.localeCompare("clear sky") == 0)
+		{document.getElementById('vreme_titlu').innerHTML = "VREME";
+			Description = "cer senin";
+			document.body.style.background = "#FDB800";
+			
+			document.getElementById('general').innerHTML= "☀️ " + Description.toLocaleString('en');
+		}
+		if(Description.localeCompare("broken clouds")==0)
+		{document.getElementById('vreme_titlu').innerHTML = "VREME";
+			Description = "nori imprastiati";
+			document.body.style.background = "#A7A13D";
+			document.getElementById('general').innerHTML= "🌤 " + Description.toLocaleString('en');
+		
+		}
+		if(Description.localeCompare("few clouds")==0)
+		{document.getElementById('vreme_titlu').innerHTML = "VREME";
+			Description = "cativa nori";
+			document.body.style.background = "#A7A13D";
+			document.getElementById('general').innerHTML= "🌤 " + Description.toLocaleString('en');
+		
+		}
+		if(Description.localeCompare("thunderstorm")==0)
+			{document.getElementById('vreme_titlu').innerHTML = "VREME";
+				Description = "furtuna";
+			document.body.style.background = "#140EA2";
+			document.getElementById('general').innerHTML= "🌪 " + Description.toLocaleString('en');
+		}
+		if(Description.localeCompare("light rain") == 0)
+			{document.getElementById('vreme_titlu').innerHTML = "VREME";
+				Description = "ploaie usoara";
+			document.body.style.background = "#140EA2";
+			//document.body.style.backgroundImage = "url('image.gif')";
+			document.getElementById('general').innerHTML= "⛈ " + Description.toLocaleString('en');
+
+			}
+//document.body.style.background = "#A7A13D";
+///document.body.style.background = "#FDB800";
+///	document.body.style.background = "#140EA2";
+
+	document.getElementById('temperatura_medie').innerHTML = "🌡 " + Temp_medie.toLocaleString('en');
+	//document.getElementById('temperatura_minima').innerHTML = "Temperatura minima: " + Temp_minima.toLocaleString('en');
+	//document.getElementById('temperatura_maxima').innerHTML = "Temperatura maxima: " + Temp_maxima.toLocaleString('en');
+	
+	document.getElementById('vant').innerHTML= "🌫 " + Vant.toLocaleString('en') + " km/h";
+	document.getElementById('umiditate').innerHTML = "💧 " + Umiditate.toLocaleString('en') + "%";
+	document.getElementById('nori').innerHTML= "☁️ " + Nori.toLocaleString('en') + "%  pe cer";
+	}})
+	.catch(function() {
+		console.log("error");
+	})
+	setTimeout(Vreme, 43200000) // update every 12 hours }
+}
+    function changeBodyBg(color){
+    }
+
+
+</script>
+
+
+
+
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>VREME</title>
+<style>
+	.wrapper { height: 100%; width: 100%; padding: 120px 60px; }
+.styled-select {
+  border: 1px solid #ccc;
+  width: 240px;
+  height: 34px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+.styled-select select {
+  background: white;
+  width: 268px;
+  padding: 5px;
+  font-size: 16px;
+  line-height: 1;
+  border: 0;
+  border-radius: 0;
+  height: 34px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.styled-select option { 
+  background-color: #fff;
+  color: #444;
+  font-size: 16px;
+  padding: 6px;
+}
+
+#lab-country-select h4 { margin: 0; }
+.lab-container {
+  margin: 0 0 10px 0;
+  background-color: #f6f6f6;
+  padding: 10px;
+  border: 1px solid #d1d1d1;
+  max-width: 600px;
+}
+
+
+
+	body {
+
+-webkit-transition: all 1.5s ease-in-out;
+-moz-transition: all 1.5s ease-in-out;
+-o-transition: all 1.5s ease-in-out;
+-ms-transition: all 1.5s ease-in-out;
+transition: all 1.5s ease-in-out;
+  height: 100%;
+  /* The image used #f06d06*/
+ background: #373940;
+color: white;
+  text-align: center;
+  /* Full height */
+font-family: system-ui;
+
+  /* Center and scale the image nicely */
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;}
+
+input[type='text']{
+    
+    color: #333;
+    width: 14rem;
+    height: 38px;
+   
+  
+    padding-left: 10px;
+    padding-right: 10px;
+
+    transition: box-shadow 320ms;
+
+    box-shadow: 0px 0px 8px 10px rgba(0,0,0,0.1);
+    
+    border-radius: 3px;
+    font-size: 18px;
+    border: 0px;
+}
+
+input[type='text']:focus {
+
+    outline: 0px;
+    outline-offset: 0px;
+    box-shadow: 0px 0px 1px 5px rgba(0,0,0,0.12);
+}
+
+input:-moz-placeholder {
+    color: #cccccc;
+}
+
+.myButton {
+  background-color:#373940;
+  border-radius:28px;
+  border:1px solid #18ab29;
+  display:inline-block;
+  cursor:pointer;
+  color:#ffffff;
+  font-family:Arial;
+  font-size:17px;
+  padding:16px 31px;
+  text-decoration:none;
+  text-shadow:0px 1px 0px #2f6627;
+}
+.myButton:hover {
+  background-color:#5cbf2a;
+}
+.myButton:active {
+  position:relative;
+  top:1px;
+}
+
+
+
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+	
+	<center><h1 id = "vreme_titlu"><b>VREME</b></h1>
+		
+<br>
+<div class="styled-select">
+  <select id="JUDETE">
+  
+    <option value="none" >SELECTEAZA JUDET</option>
+    <option value="Alba">Alba</option>
+  <option value="Arad">Arad</option>
+  <option value="Arges">Arges</option>
+  <option value="Bacau">Bacau</option>
+  <option value="Bihor">Bihor</option>
+  <option value="București">Bucuresti</option>
+  <option value="Bistrita-Nasaud">Bistrita-Nasaud</option>
+  <option value="Botosani">Botosani</option>
+  <option value="Brasov">Brasov</option>
+  <option value="Braila">Braila</option>
+  <option value="Buzau">Buzau</option>
+  <option value="Caras-Severin">Caras-Severin</option>
+  <option value="Calarasi">Calarasi</option>
+  <option value="Cluj">Cluj</option>
+  <option value="Constanta">Constanta</option>
+  <option value="Covasna">Covasna</option>
+  <option value="Dambovita">Dambovita</option>
+  <option value="Dolj">Dolj</option>
+  <option value="Galati">Galati</option>
+  <option value="Giurgiu">Giurgiu</option>
+  <option value="Gorj">Gorj</option>
+  <option value="Harghita">Harghita</option>
+  <option value="Hunedoara">Hunedoara</option>
+  <option value="Ialomita">Ialomita</option>
+  <option value="Iași">Iasi</option>
+  <option value="Ilfov">Ilfov</option>
+  <option value="Maramures">Maramures</option>
+  <option value="Mehedinti">Mehedinti</option>
+  <option value="Mures">Mures</option>
+  <option value="Neamt">Neamt</option>
+  <option value="Olt">Olt</option>
+  <option value="Prahova">Prahova</option>
+  <option value="Satu Mare">Satu Mare</option>
+  <option value="Salaj">Salaj</option>
+  <option value="Sibiu">Sibiu</option>
+  <option value="Suceava">Suceava</option>
+  <option value="Teleorman">Teleorman</option>
+  <option value="Timis">Timis</option>
+  <option value="Tulcea">Tulcea</option>
+  <option value="Vaslui">Vaslui</option>
+  <option value="Valcea">Valcea</option>
+  <option value="Vrancea">Vrancea</option>
+  </select> 
+</div>
+
+<input type='text' id='avansat' placeholder='CAUTARE AVANSATA'>
+<br><br>
+
+
+	<button onclick="Start()" class = "myButton">Start</button>
+<br>
+</center>
+<center><h1 id ="idjudet"></h1>
+<h1 id = "temperatura_medie"></h1>
+<h1 id = "temperatura_minima"></h1>
+<h1 id = "temperatura_maxima"></h1>
+<h1 id = "umiditate"></h1>
+<h1 id = "vant"></h1>
+<h1 id = "nori"></h1>
+<h1 id = "general"></h1>
+
+
+
+
+
+</center>
+</body>
+
+
+
+</html>
+
